@@ -1,0 +1,53 @@
+hydra:
+  run:
+    dir: ${output_dir}
+  output_subdir: ${output_dir}/code/hydra           # Store hydra's config breakdown here for debugging
+  searchpath:
+    - pkg://config
+    
+
+defaults:
+  # Data module configurations
+  - datamodule: default_datamodule
+
+  # Trainer configurations
+  - trainer: default_trainer
+
+  # callbacks used during training
+  - callbacks: default_callbacks
+
+  # Metrics
+  - metrics: ???
+
+  # Your model
+  - model: ???
+
+  - _self_
+
+
+
+# Mandatory parameters
+py_func: ???                                          # Function to be run inside main (can be "train", "validate", "test")
+
+# If want to validate a single model
+# used for testing
+checkpoint_to_validate: null
+
+# Common experiment configs
+group: exp                                        # This is where results, logs, config, etc. are saved, preferred to use abs path to avoid duplicates
+experiment_name: ???                              # Experiment name.
+
+# Directory structure
+date_format: '%Y.%m.%d.%H.%M.%S'
+experiment_time: ${now:${date_format}}              # Current time of an experiment
+experiment: ${experiment_name}/${experiment_time}   # Unique name of the experiment
+output_dir: ${group}/${experiment}                  # Output directory to save all training artifacts
+log_config: false                                   # Whether to log the final config after all overrides and interpolations
+
+# Execution
+seed: 0                                             # Random seed value.
+enable_profiling: false                             # Whether to enable profiler which will be dumped to "profiling" folder
+
+# Logger
+logger_level: info                                  # Level of logger
+logger_format_string: null                          # Logger format string, set null to use the default format string

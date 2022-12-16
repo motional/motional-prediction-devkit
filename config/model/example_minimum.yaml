@@ -1,0 +1,4 @@
+_target_: model.example_minimum.ExampleMinimumModel
+_convert_: all
+
+lr: 1e-4

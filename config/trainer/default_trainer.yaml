@@ -1,0 +1,40 @@
+checkpoint:
+  resume_training: false  # load the model from the last epoch and resume training
+  save_top_k: 1  # save the top K models in terms of performance
+  monitor: metrics/val_minfde_at6  # metric to monitor for performance
+  mode: min  # minimize/maximize metric
+
+params:
+  max_time: 05:00:00:00  # training time before the process is terminated
+
+  max_epochs: 20  # maximum number of training epochs
+  check_val_every_n_epoch: 1  # run validation set every n training epochs
+  val_check_interval: 1.0  # [%] run validation set every X% of training set
+
+  limit_train_batches: 1.0  # how much of training dataset to check (float = fraction, int = num_batches)
+  limit_val_batches: 1.0  # how much of validation dataset to check (float = fraction, int = num_batches)
+  limit_test_batches: 1.0  # how much of test dataset to check (float = fraction, int = num_batches)
+
+  devices: -1  # number of GPUs to utilize (-1 means all available GPUs)
+  strategy: ddp # distribution method
+  accelerator: gpu
+  precision: 32  # floating point precision
+  num_nodes: 1  # Number of nodes used for training
+
+  auto_scale_batch_size: false
+  auto_lr_find: false  # tunes LR before beginning training
+
+  num_sanity_val_steps: 0  # number of validation steps to run before training begins
+  fast_dev_run: false  # runs 1 batch of train/val/test for sanity
+
+  accumulate_grad_batches: 1  # accumulates gradients every n batches
+  track_grad_norm: -1  # logs the p-norm for inspection
+  gradient_clip_val: 0.0  # value to clip gradients
+  gradient_clip_algorithm: norm  # [value, norm] method to clip gradients
+  
+overfitting:
+  enable: false  # run an overfitting test instead of training
+
+  params:
+    max_epochs: 150  # number of epochs to overfit the same batches
+    overfit_batches: 1  # number of batches to overfit

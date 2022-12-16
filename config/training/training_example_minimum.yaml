@@ -1,0 +1,54 @@
+# @package _global_
+experiment_name: training_example_minimum
+py_func: train
+
+defaults:
+  - override /model: example_minimum
+  - override /metrics:
+      - minade_at1
+      - minade_at6
+      - minfde_at1
+      - minfde_at6
+  - override /trainer: default_trainer
+  - override /callbacks: default_callbacks
+  - _self_
+
+group: /home_shared/jinghuan.shang/prediction_devkit/exp # log dir
+
+# path to save prediction results, used to generate result files for testing
+test_result_save_dir: "/data/exp/jinghuan.shang/results/training_example_minimum/"
+
+# simple but effective overrides below, if you don't want to create a
+# seperate file to override.
+datamodule: # see config/datamodule/defult_datamodule.yaml
+
+  # change these to your path
+  root: "/data/exp/jinghuan.shang/nuplan/v1.1/parquet/"
+  cache_dataset_root: "/data/exp/jinghuan.shang/cache/"
+  map_root: "/data/exp/jinghuan.shang/nuplan/v1.1/maps/"
+
+  map_radius: 50
+  scenario_type_filter: null
+  generate_cache: true
+  force_cache: false
+  multiprocessing_cache: true
+  num_cache_wokers: 60
+
+  train_batch_size: 24
+  val_batch_size: 24
+  num_workers: 12  # number of dataloader workers
+
+  pin_memory: true  # allocate dataloader examples in a page-locked memory for faster host-to-device transfer
+  drop_last: true  # drop the last examples if the batch is not complete
+
+trainer:
+  params:
+    max_epochs: 3
+    accelerator: gpu
+    devices: -1
+    strategy: ddp_find_unused_parameters_false
+
+  checkpoint:
+    resume_training: false
+
+

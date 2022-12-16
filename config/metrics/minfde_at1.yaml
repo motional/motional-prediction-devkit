@@ -1,0 +1,5 @@
+minfde_at1:
+  _target_: metric.minfde.MinFDE
+  _convert_: all
+
+  at: 1

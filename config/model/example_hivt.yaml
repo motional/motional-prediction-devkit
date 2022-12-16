@@ -1,0 +1,19 @@
+_target_: model.example_hivt.HiVT
+_convert_: all
+
+historical_steps: 20
+future_steps: 80
+num_modes: 6
+rotate: true
+node_dim: 2
+edge_dim: 2
+embed_dim: 64
+num_heads: 8
+dropout: 0.1
+num_temporal_layers: 4
+num_global_layers: 3
+local_radius: 50
+parallel: false
+lr: 5e-4
+weight_decay: 1e-4
+T_max: 64

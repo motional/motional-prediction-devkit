@@ -1,0 +1,57 @@
+name: prediction
+
+channels:
+    - defaults
+    - pytorch
+    - pyg
+
+dependencies:
+    - python=3.9
+    - pip
+
+    # pytorch 
+    - pytorch==1.12.1
+    - torchvision==0.13.1
+    - torchaudio==0.12.1
+    - cudatoolkit=11.3 # you can adjust it to match your own cuda version
+
+    # torch-geometrics
+    - pyg
+
+    - pandas
+
+    - pip:
+        - pyarrow # For parquet
+        - pygeos
+        - pyinstrument
+
+        - pytorch-lightning
+        - torchmetrics
+
+        - boto3    # for s3
+        - botocore # for s3
+        - docker
+        - Fiona  # Used in GpkgMapsDB.py
+        - geopandas  # Used to read maps
+        - rasterio
+        - pyogrio
+        - requests
+
+        - grpcio==1.43.0  # Used for communication with submission container
+        - grpcio-tools==1.43.0  # Used for communication with submission container
+        - guppy3==3.1.2
+        
+
+        - hydra-core  # Used for configs
+        - omegaconf
+
+        - joblib
+        - psutil
+
+        - jupyter     # Used to show the notebook
+        - jupyterlab
+
+        - scipy
+        - matplotlib  # Used for vis
+        - tqdm
+

@@ -1,0 +1,24 @@
+_target_: dataloader.datamodule.MotionalDataModule
+_convert_: all
+
+
+root: "/data/motional_prediction/"
+cache_dataset_root: "/data/motional_prediction/cache/"
+map_root: "/data/motional_prediction/maps/"
+map_radius: 50
+scenario_type_filter: null
+generate_cache: true
+force_cache: false
+multiprocessing_cache: false
+num_cache_wokers: 50
+
+train_batch_size: 4
+val_batch_size: 4
+
+num_workers: 8  # number of dataloader workers
+pin_memory: true  # allocate dataloader examples in a page-locked memory for faster host-to-device transfer
+drop_last: true  # drop the last examples if the batch is not complete
+
+train_fraction: 1.0  # [%] fraction of training samples to use
+val_fraction: 1.0  # [%] fraction of validation samples to use
+test_fraction: 1.0  # [%] fraction of test samples to use

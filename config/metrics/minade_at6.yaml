@@ -1,0 +1,5 @@
+minade_at6:
+  _target_: metric.minade.MinADE
+  _convert_: all
+
+  at: 6

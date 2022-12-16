@@ -1,0 +1,12 @@
+model_checkpoint_callback:
+  _target_: callback.checkpoint_callback.ModelCheckpointAtEpochEnd
+  _convert_: 'all'
+
+  save_last: false
+  dirpath: ${output_dir}/best_model
+  filename: "best_{epoch}"
+
+  # see default_lightning.yaml
+  save_top_k: ${trainer.checkpoint.save_top_k}
+  monitor: ${trainer.checkpoint.monitor}
+  mode: ${trainer.checkpoint.mode}
