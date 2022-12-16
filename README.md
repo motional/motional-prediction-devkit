@@ -169,4 +169,4 @@ TBD
 ```
 
 ## Contact
-Welcome comments and issues under this repo. Your voice is valuable for our development.
+Welcome comments and issues for this repo. Your voice is valuable for our development.
