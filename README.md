@@ -104,6 +104,9 @@ Configs related to generate cache:
 We can use the generated cache, or re-use any pre-generated cache:
 ```
 python main.py +training=training_example_minimum.yaml
+
+# train/val/test on specific scenario(s)
+python main.py +training=training_example_minimum.yaml "datamodule.scenario_type_filter=[on_intersection, on_carpark]"
 ```
 
 ### Evaluation
@@ -162,7 +165,7 @@ We will require participants to submit their code (docker) to the challenge. The
     
  }
  ```
-We provide an exampl to save this kind of file at `LightningModuleWrapper.test_step()` in `training_engine/lightning_module_wrapper.py`.
+We provide an example for saving this kind of file at `LightningModuleWrapper.test_step()` in `training_engine/lightning_module_wrapper.py`.
 
 ### Important Dates
 TBD

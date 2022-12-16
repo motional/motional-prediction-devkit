@@ -142,17 +142,19 @@ def convert_one_log(db_file, split):
         agents_trajectory = agents_trajectory.assign(track_token=agents_tokens,
                                                 city=city_name).reindex()
 
-        
+        filename_to_save = f"{db_file}_{file_counter:05d}.parquet"
+        metadata_record["filename"].append(filename_to_save)
+        metadata_record["scenario_tag"].append(this_tag)
         
         tags = ego_trajectory[["type", "timestamp"]][:input_steps]
-        counted_tags = tags.groupby(["type"]).count()
-        if len(counted_tags) == 0:
+        non_unknown_tags = tags[~tags["type"].isnull()]
+        if len(non_unknown_tags) == 0:
             this_tag = "unknown"
         else:
-            this_tag = tags.groupby(["type"]).count() \
-                             .reset_index(name="count") \
-                             .sort_values(["count", "timestamp"], ascending=[False, False]) \
-                             .head(0)["type"]
+            this_tag = non_unknown_tags.groupby(["type"], as_index=False).count() \
+                             .sort_values(["timestamp"], ascending=[False]) \
+                             .reset_index(drop=True) \
+                             .iloc[0]["type"]
 
         # print (this_tag)
 
@@ -161,13 +163,9 @@ def convert_one_log(db_file, split):
                                     agents_trajectory[CONSIDERED_COLUMNS]],
                                     ignore_index=True)
         converted_df = converted_df.sort_values(by = ["timestamp", "track_token"], ascending = [True, True])
-        converted_df.reset_index(drop=True)
+        converted_df = converted_df.reset_index(drop=True)
         assert len(converted_df) == (len(ego_trajectory) + len(agents_trajectory))
 
-        filename_to_save = f"{db_file}_{file_counter:05d}.parquet"
-        metadata_record["filename"].append(filename_to_save)
-        metadata_record["scenario_tag"].append(this_tag)
-        
         save_dataframe(converted_df, os.path.join(SAVE_DIR, split), filename_to_save)
         file_counter += 1
 
@@ -204,7 +202,7 @@ def merge_meta(local_dataset_dir, splits):
         dataset_meta = pd.concat(dataset_meta_list,
                                     ignore_index=True)
         dataset_meta = dataset_meta.sort_values(by = ['filename'], ascending = [True])
-        dataset_meta.reset_index(drop=True)
+        dataset_meta = dataset_meta.reset_index(drop=True)
         save_dataframe(dataset_meta, metadata_split_dir, f"{split}_meta.parquet")
         # optionally delete original per-db meta files
         # for p in metadata_paths:
@@ -247,7 +245,7 @@ def generate_parse_stats(results):
     print ("--------------------")
     
 
-if __name__ == "__main__":
+def create_dataset():
     splits = get_splits()
     db_file_list = []
     split_list = []
@@ -264,8 +262,12 @@ if __name__ == "__main__":
     workers = 30
     with get_context("spawn").Pool(processes=workers) as pool:
         results = pool.starmap(convert_one_log, zip(db_file_list, split_list))
+    return results
 
-    generate_parse_stats()
+if __name__ == "__main__":
+    
+    results = create_dataset()
+    generate_parse_stats(results)
 
     # note: this function only works on local storage. 
     # It has not supported reading from remote `SAVE_DIR` yet.
