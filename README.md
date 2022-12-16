@@ -29,7 +29,7 @@ prediction_devkit
 ├── map*                    - Map API. This dir is self-contained and can be migrated to your own repo
 │   ├── nuplan_map
 │   │       ├── nuplan_map.py       - Main map API class
-│   │       ├── vector_map_utils.py - Main utils to get vector map features from the map
+│   │       ├── vector_map_utils.py - Main utils to get vector map features from the API
 ├── metric                  - Modularized evaluation metrics
 ├── model                   - Define motion forecasting models
 ├── training_engine         - Main pipeline of model training
@@ -150,6 +150,8 @@ We will require participants to submit their code (docker) to the challenge. The
  ```
  {
     "4c06fc2a347596b": torch.Tensor([K, T, 2]),
+    "04c06fc2a347596b": torch.Tensor([K, T, 2]),
+    ...
     [agent_id: str]: [prediction: torch.Tensor of shape [K, T, 2]] 
     # K is multi modalities (sorted by confidence descendingly if you have)
     # T is time steps (80) and 2 stands for x and y coordinates
