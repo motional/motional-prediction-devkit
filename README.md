@@ -11,17 +11,17 @@ Quick Start: [[Dataset]](#download-dataset) [[Run Examples]](#run) [[Devkit Stru
 - **Trajectories**: link to be posted in Janurary.
 - **Map**: download the map from [nuPlan](https://www.nuscenes.org/nuplan) under nuPlan v1.1.
 
-Note: we share the same dataset source as [nuPlan](https://www.nuscenes.org/nuplan). Here we provide `.parquet` files as a better representation for prediction task. We also provide a script in `_db_converter` if you want a highly customized data, for example longer inputs/targets beyond 10s segments we provide. You are able to process thoes `.db` files provided by nuPlan with the script. This could be useful in your own task formulation. However, as for challenge submission, we will stick to the `.parquet` format as in training and validation splits.
+Note: we share the same data source as [nuPlan](https://www.nuscenes.org/nuplan). Here we provide `.parquet` files as a better representation for prediction task. We also provide a script in `_db_converter` if you want a highly customized data, for example longer inputs/targets beyond 10s segments we provide. You are able to process thoes `.db` files provided by nuPlan with the script. This could be useful in your own task formulation. However, as for challenge submission, we will stick to the `.parquet` format as in training and validation splits.
 
 ## Devkit Structure
 
 Please use the information below to understand the devkit better if you want to start from our devkit. This devkit uses `PyTorch-Lightning` for training and `Hydra` for configurations.
 
-*Want to create your own pipeline?* Directories/files with star(*) are what you want to primarily look into if you want to set up your own pipeline from scratch.
+*Want to create your own pipeline?* Directories/files with star(*) are important to be taken with you.
 
 ```
 prediction_devkit
-├── _db_converter           - Script for convert nuPlan .db to .parquet. Only used if a highly customized dataset wanted.
+├── _db_converter           - Script for converting nuPlan .db to .parquet. Only used if a highly customized dataset wanted.
 ├── _doc                    - Resources for readme
 ├── callback                - Callback functions used during training
 ├── config                  - Hydra configs only
@@ -133,6 +133,9 @@ Directories/files that are mainly related to modeling:
 
 Note: the current provided example is making predictions on vehicles only. To make predictions on pedestrains and other types of objects, please change/create your own DataModule.
 
+### Trainer and Hyperparameters
+See `config/trainer/default_traner.yaml` and overrides included in `config/training/training_example_minimum.yaml`.
+
 ## Submit to the Challenge
 ### Task Definition
 In Motional's prediction challenge, a motion forecating model is required to take 2s history and to make predictions of 8s future.
@@ -141,7 +144,7 @@ Though the dataset is provided in 20Hz, we will only evaluate the results in 10H
 ### Submission Format
 *Tentative*
 
-We will require participants to submit their code (docker) to the challenge. The submission should include their trained model with the commond to run test. We will require the participants to generate files with prediction results. We will use the content in thoes files to compute the testing metric.
+We will require participants to submit their code (docker) to the challenge. The submission should include their trained model with the commond to run test. We will require the participants to generate files with prediction results through the code execution. We will use the content in thoes files to compute the testing metric.
 
 **Tentative** result file format is below:
  - One result file per sample (*not per batch*)
