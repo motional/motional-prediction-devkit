@@ -175,3 +175,8 @@ TBD
 
 ## Contact
 Welcome comments and issues for this repo. Your voice is valuable for our development.
+
+## Credits
+[nuPlan](https://www.nuscenes.org/nuplan) and [nuplan-devkit](https://github.com/motional/nuplan-devkit/)
+
+[HiVT](https://github.com/ZikangZhou/HiVT)
