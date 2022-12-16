@@ -42,8 +42,11 @@ class ExampleMinimumModel(LightningModuleWrapper):
         prediction = self.model(features["x"][:, -1]).reshape(-1, 6, 80, 2)
         mask = ~target.isnan()
         # emulate calculate some loss
-        # we don't modularize loss functions for the best flexibility for the user            
-        loss = self.mse_loss(prediction[:, 0][mask], target[mask])
+        # we don't modularize loss functions for the best flexibility for the user
+        if target.size(1) == 0: # if test, no target
+            loss = 0
+        else:
+            loss = self.mse_loss(prediction[:, 0][mask], target[mask])
         # prediction is in shape of [N, K, T, 2], and target is in shape of [N, T, 2]
         # for calculating metrics
         # K is number of modes, and should be sorted by confidence (if have) descending

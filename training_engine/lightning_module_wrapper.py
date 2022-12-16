@@ -66,7 +66,11 @@ class LightningModuleWrapper(pl.LightningModule):
         loss = results["loss"]
         info = results["info"]
 
-        # we split metrics part out for flexible evaluation on different metrics
+        # if test, no need to compute metrics
+        # we will compare the files
+        if prefix == "test":
+            return results
+        
         self._compute_metrics(predictions, targets)
 
         self._log_step(loss, prefix, batch_size=targets.size(0))
@@ -157,16 +161,19 @@ class LightningModuleWrapper(pl.LightningModule):
             # the goal is to generate result files: {sample_name}.pt per sample item in the test split
             # see self.save_prediction_results() for the actual format
             sample_names = batch["sample_name"] # filename without extension
-            agents_count = batch["agents_count"]
+            agents_count = batch["agents_count"] # used to check agent count with agent id
+            agents_id = batch["agents_id"]
 
             # torch.Tensor [N, K, T, 2], N is # agents, K is # modes, T is # timesteps, 2 coord dimension
             prediction = results["prediction"] 
             accu_count = 0
             # for each individual sample, save a single result file contains results of all agents in that sample
-            for name, count in zip(sample_names, agents_count):
-                agents_id = batch["agents_id"][accu_count:accu_count+count]
-                self.save_prediction_results(name, agents_id, prediction)
-                accu_count += count
+            for name, count, ids in zip(sample_names, agents_count, agents_id):
+                name = name[0]
+                count = count[0]
+                assert len(ids) == count
+                self.save_prediction_results(name, ids, prediction[accu_count: accu_count+len(ids)])
+                accu_count += len(ids)
 
             return results['loss']
 

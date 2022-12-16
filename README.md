@@ -15,7 +15,7 @@ Note: we share the same data source as [nuPlan](https://www.nuscenes.org/nuplan)
 
 ## Devkit Structure
 
-Please use the information below to understand the devkit better if you want to start from our devkit. This devkit uses `PyTorch-Lightning` for training and `Hydra` for configurations.
+Please use the information below to understand the devkit better if you want to start from our devkit. This devkit uses `PyTorch-Lightning` for training, `Hydra` for configurations, and `pytorch-geometric` for data loading.
 
 *Want to create your own pipeline?* Directories/files with star(*) are important to be taken with you.
 
