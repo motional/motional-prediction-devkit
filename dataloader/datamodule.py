@@ -32,23 +32,18 @@ class MotionalDataModule(LightningDataModule):
         self.kwargs = kwargs
 
     def prepare_data(self) -> None:
-        MotionalDataset(self.root, 'train', map_root=self.map_root, **self.kwargs)
-        MotionalDataset(self.root, 'val', map_root=self.map_root, **self.kwargs)
-        try:
-            MotionalDataset(self.root, 'test', map_root=self.map_root, **self.kwargs)
-        except:
-            # it's fine to not have this when developing. used for test
-            pass
+        if self.kwargs["py_func"] == "test":
+            MotionalDataset(self.root, "test", map_root=self.map_root, **self.kwargs)
+        else:
+            MotionalDataset(self.root, "train", map_root=self.map_root, **self.kwargs)
+            MotionalDataset(self.root, "val", map_root=self.map_root, **self.kwargs)
 
     def setup(self, stage: Optional[str] = None) -> None:
-        self.train_dataset = MotionalDataset(self.root, 'train' , map_root=self.map_root, **self.kwargs)
-        self.val_dataset = MotionalDataset(self.root, 'val', map_root=self.map_root, **self.kwargs)
-        try:
-            self.test_dataset = MotionalDataset(self.root, 'test', map_root=self.map_root, **self.kwargs)
-        except:
-            logger.info("skip building test set.")
-            self.test_dataloader = None
-            pass
+        if self.kwargs["py_func"] == "test":
+            self.test_dataset = MotionalDataset(self.root, "test", map_root=self.map_root, **self.kwargs)
+        else:
+            self.train_dataset = MotionalDataset(self.root, "train" , map_root=self.map_root, **self.kwargs)
+            self.val_dataset = MotionalDataset(self.root, "val", map_root=self.map_root, **self.kwargs)
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.train_batch_size, shuffle=self.shuffle,
@@ -60,7 +55,5 @@ class MotionalDataModule(LightningDataModule):
                           pin_memory=self.pin_memory, persistent_workers=self.persistent_workers, drop_last=False)
 
     def test_dataloader(self):
-        if self.test_dataloader is None:
-            return None
         return DataLoader(self.test_dataset, batch_size=self.val_batch_size, shuffle=False, num_workers=self.num_workers,
                           pin_memory=self.pin_memory, persistent_workers=self.persistent_workers, drop_last=False)

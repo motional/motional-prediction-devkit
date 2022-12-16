@@ -52,7 +52,7 @@ def build_training_engine(cfg: DictConfig) -> TrainingEngine:
         profiler.start_profiler("build_training_engine")
 
     # Build the datamodule
-    datamodule = instantiate(cfg.datamodule)
+    datamodule = instantiate(cfg.datamodule, py_func=cfg.py_func)
         
 
     # Build model (lightning module)
